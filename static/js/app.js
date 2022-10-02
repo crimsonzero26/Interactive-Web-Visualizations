@@ -3,7 +3,6 @@ console.log('This is app.js');
 function DrawBargraph(sampleId)
 {
     console.log(`DrawBargraph(${sampleId})`);
-
 }
 
 function DrawBubblechart(sampleId)
@@ -20,6 +19,17 @@ function ShowMetadata(sampleId)
 {
     console.log(`ShowMetadata(${sampleId})`);
 }
+
+function optionChanged(sampleId)
+{
+    console.log(`optionChanged, new value: ${sampleId}`);
+
+    DrawBargraph(sampleId);
+    DrawBubblechart(sampleId);
+    ShowMetadata(sampleId);
+    DrawGauge(sampleId);
+}
+
 
 function InitDashboard()
 {
