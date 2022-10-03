@@ -1,3 +1,4 @@
+// This code is largely inspired by Intructor Dom's tutorial for Homework 14.
 console.log('This is app.js');
 
 // Define a global variable to hold the URL
@@ -94,13 +95,18 @@ function DrawGauge(sampleId)
 
     d3.json(url).then(data => {
 
-        let wash_freq = data.WFREQ;
-        console.log(wash_freq);
+        let metadata = data.metadata;
+        console.log(metadata);
+        let resultArray = metadata.filter(s => s.id == sampleId);
+        let result = resultArray[0];
+        let wfreq = result.wfreq;
+
+        
   
         var data = [
         {
           domain: { x: [0, 1], y: [0, 1] },
-          value: wash_freq,
+          value: wfreq,
           title: { text: "<b>Wash Frequency</b><br><i>Scrubs per week</i>"},
           type: "indicator",
           mode: "gauge+number+range",
@@ -119,9 +125,21 @@ function DrawGauge(sampleId)
               { range: [8, 9], color: "rgb(60,153,60)" },
               { range: [9, 10], color: "rgb(42,146,42)" }
             ],
+            threshold: {
+                line: { color: "red", width: 4 },
+                thickness: 0.75,
+                value: 10
+            }
             }
         }
-        ]
+    ]
+
+        // Create layout
+        var gaugelayout = { width: 600, height: 450, margin: { t: 30, b: 50 } };
+        
+
+        // Call Plotly
+        Plotly.newPlot('gauge', data, gaugelayout);
     });
 }
 
@@ -130,6 +148,7 @@ function ShowMetadata(sampleId)
     console.log(`ShowMetadata(${sampleId})`);
 
     d3.json(url).then((data) => {
+
         let metadata = data.metadata;
         console.log(metadata);
 
@@ -187,7 +206,6 @@ function InitDashboard()
         DrawBubblechart(initialId);
         // Show the metadata for the selected sample id
         ShowMetadata(initialId);
-
         // Show the gauge
         DrawGauge(initialId);
     });
